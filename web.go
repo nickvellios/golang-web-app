@@ -32,6 +32,7 @@ func renderTemplate(w http.ResponseWriter, tmpl string, data *Page) {
 	}
 }
 
+// Index page handler
 func (g *glob) Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	u, ok := r.Context().Value("email").(string)
 	if !ok {
@@ -51,17 +52,20 @@ func (g *glob) Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params
 	renderTemplate(w, "index", p)
 }
 
+// Login page handler
 func (g *glob) Login(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	p := &Page{Title: "Login"}
 	renderTemplate(w, "login", p)
 }
 
+// Logout handler
 func (g *glob) Logout(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	cook := http.Cookie{Name: "user", Value: "", HttpOnly: true, MaxAge: -1, Path: "/"}
 	http.SetCookie(w, &cook)
 	http.Redirect(w, r, "/", 302)
 }
 
+// Signup page handler
 func (g *glob) Signup(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	u, ok := r.Context().Value("user").(string)
 	if !ok {
@@ -71,6 +75,7 @@ func (g *glob) Signup(w http.ResponseWriter, r *http.Request, ps httprouter.Para
 	renderTemplate(w, "signup", p)
 }
 
+// SignupPost is the sign up form action handler.
 func (g *glob) SignupPost(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	user := &users.User{
 		Email:    r.FormValue("email"),
@@ -88,6 +93,7 @@ func (g *glob) SignupPost(w http.ResponseWriter, r *http.Request, ps httprouter.
 	http.Redirect(w, r, "/", 302)
 }
 
+// LoginPost is the login form action handler.
 func (g *glob) LoginPost(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	user := &users.User{
 		Email:    r.FormValue("email"),
@@ -95,7 +101,7 @@ func (g *glob) LoginPost(w http.ResponseWriter, r *http.Request, ps httprouter.P
 		Db:       g.udb.Db,
 	}
 	if !user.Authenticate() {
-		fmt.Fprint(w, "Authentication Failed.  Bad username/password combination or user doesn't found\n")
+		fmt.Fprint(w, "Authentication Failed.  Bad username/password combination or user not found\n")
 		return
 	}
 	setCookie(w, user.Email)

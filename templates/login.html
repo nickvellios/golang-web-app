@@ -1,0 +1,27 @@
+{{ define "login" }}
+{{ template "header" . }}
+
+<div class="container">
+	<div class="page-header">
+		<h1><a href="/"><img src="/assets/images/buck.png"></a> Login</h1>
+	</div>
+	<p class="lead">Enter your username and password to login.</p>
+
+	<div class="row">
+		<form action="/login/" method="POST">
+			<div class="col-md-6">
+				<label for="email">Email</label>
+				<input type="text" class="form-control" name="email" placeholder="Email" autofocus>
+				<br>
+				<label for="password">Password</label>
+				<input type="text" class="form-control" name="password" placeholder="Password">
+				<br>
+				<button class="btn btn-success pull-right" type="submit">Login</button>
+			</div>
+			<div class="col-md-6" id="copy_col" style="display:none;">
+			</div>
+		</form>
+	</div>
+</div>
+{{ template "footer" }}
+{{ end }}

@@ -1,0 +1,26 @@
+{{ define "index" }}
+{{ template "header" . }}
+
+<div class="container">
+	<div class="page-header">
+		<h1><a href="/"><img src="/assets/images/buck.png"></a> Welcome</h1>
+	</div>
+	<p class="lead">This is a test web app</p>
+
+	<div class="row">
+		<div class="col-md-6">
+			{{ if not .Content.LoggedIn }}
+				<a class="btn btn-info" type="button" href="/signup">Signup</a>
+				<a class="btn btn-info" type="button" href="/login">Login</a>
+			{{ else }}
+				<em>You are currently logged in as {{ .Content.Email }}.</em>
+				<a class="btn btn-info" type="button" href="/logout">Logout</a>
+			{{ end }}
+		</div>
+		<div class="col-md-6">
+
+		</div>
+	</div>
+</div>
+{{ template "footer" }}
+{{ end }}

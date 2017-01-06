@@ -2,7 +2,6 @@ package ncrypt
 
 import (
 	"crypto/hmac"
-	"crypto/md5"
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/base64"
@@ -18,8 +17,8 @@ func Hmac256(message, secret string) string {
 	return base64.StdEncoding.EncodeToString(h.Sum(nil))
 }
 
-func MD5(text string) string {
-	hasher := md5.New()
+func SHA2(text string) string {
+	hasher := sha256.New()
 	hasher.Write([]byte(text))
 	return hex.EncodeToString(hasher.Sum(nil))
 }

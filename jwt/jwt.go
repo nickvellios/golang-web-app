@@ -49,7 +49,7 @@ func Generate(claim map[string]string, exp int) string {
 	}
 	payload := base64.StdEncoding.EncodeToString([]byte(pl2))
 	// Create a new secret from our salt and the paylod json string.
-	secret := ncrypt.MD5(salt + string(pl2))
+	secret := ncrypt.SHA2(salt + string(pl2))
 	// Build signature with the new secret and base64 encode it.
 	hash := ncrypt.Hmac256(header+"."+payload, secret)
 	signature := base64.StdEncoding.EncodeToString([]byte(hash))
@@ -89,7 +89,7 @@ func Decode(jwt string) (map[string]string, error) {
 		return nil, errors.New("Expired JWT")
 	}
 	// This probably should be one of the first checks, preceeding the date check.  If the signature of the JWT doesn't match there is likely fuckery afoot
-	ha := ncrypt.Hmac256(string(parts[0])+"."+string(parts[1]), ncrypt.MD5(salt+string(payload)))
+	ha := ncrypt.Hmac256(string(parts[0])+"."+string(parts[1]), ncrypt.SHA2(salt+string(payload)))
 	if ha != string(signature) {
 		return nil, errors.New("Invalid JWT signature")
 	}

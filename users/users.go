@@ -1,7 +1,7 @@
 package users
 
 import (
-	"crypto/md5"
+	"crypto/sha256"
 	"database/sql"
 	"errors"
 	"fmt"
@@ -141,7 +141,7 @@ func (u *User) HashPass() {
 }
 
 func CSRFToken() string {
-	h := md5.New()
+	h := sha256.New()
 	crutime := time.Now().Unix()
 	io.WriteString(h, strconv.FormatInt(crutime, 10))
 	io.WriteString(h, string(ncrypt.RandomBytes(17)))

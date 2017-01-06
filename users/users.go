@@ -15,7 +15,7 @@ import (
 type User struct {
 	Email     string  `json:"email"`
 	Name      string  `json:"name"`
-	Password  string  `json:"password"`
+	Password  string  `json:"-"`
 	Hash      string  `json:"-"`
 	CSRFToken string  `json:"-"`
 	Id        int     `json:"id"`
@@ -59,9 +59,13 @@ func (u *User) Save() {
 	// Save user to db
 	u.HashPass()
 	stmt, err := u.Db.Prepare("UPDATE users SET email=$1, name=$2, password=$3 WHERE id=$4")
-	checkDBErr(err)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 	_, err = stmt.Exec(u.Email, u.Name, u.Hash, u.Id)
-	checkDBErr(err)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 }
 */
 

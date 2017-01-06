@@ -39,7 +39,7 @@ func (udb *UrlDB) Open() error {
 								email VARCHAR(256) UNIQUE,
 								password VARCHAR(128),
 								name VARCHAR(64),
-								csrftok VARCHAR(32),
+								csrftok VARCHAR(64),
 								t_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 							);`)
 	checkDBErr(err)

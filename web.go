@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-	"webapp/jwt"
-	"webapp/users"
+
+	"github.com/nickvellios/golang-web-app/jwt"
+	"github.com/nickvellios/golang-web-app/users"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -34,11 +35,7 @@ func renderTemplate(w http.ResponseWriter, tmpl string, data *Page) {
 
 // Index page handler
 func (g *glob) Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	u, ok := r.Context().Value("email").(string)
-	if !ok {
-		u = ""
-	}
-
+	u, _ := r.Context().Value("email").(string)
 	p := &Page{
 		Title: "Home",
 		Content: struct {
@@ -67,10 +64,7 @@ func (g *glob) Logout(w http.ResponseWriter, r *http.Request, _ httprouter.Param
 
 // Signup page handler
 func (g *glob) Signup(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	u, ok := r.Context().Value("user").(string)
-	if !ok {
-		u = ""
-	}
+	u, _ := r.Context().Value("email").(string)
 	p := &Page{Title: "Signup " + u}
 	renderTemplate(w, "signup", p)
 }

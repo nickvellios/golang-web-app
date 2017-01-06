@@ -18,7 +18,8 @@ import (
 	"net/http"
 	"strings"
 	"time"
-	"webapp/ncrypt"
+
+	"github.com/nickvellios/golang-web-app/ncrypt"
 )
 
 // salt is a randomly generated string used when signing a JWT

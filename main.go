@@ -4,7 +4,8 @@ import (
 	"log"
 	"net/http"
 	"time"
-	"webapp/db"
+
+	"github.com/nickvellios/golang-web-app/db"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -13,7 +14,7 @@ type glob struct {
 	udb *db.UrlDB
 }
 
-var templateDir = "./src/webapp/templates/"
+var templateDir = "./src/github.com/nickvellios/golang-web-app/templates/"
 
 func main() {
 	time.LoadLocation("PST")

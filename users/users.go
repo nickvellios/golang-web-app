@@ -9,7 +9,8 @@ import (
 	"regexp"
 	"strconv"
 	"time"
-	"webapp/ncrypt"
+
+	"github.com/nickvellios/golang-web-app/ncrypt"
 )
 
 type User struct {

@@ -78,12 +78,11 @@ func (g *glob) Signup(w http.ResponseWriter, r *http.Request, ps httprouter.Para
 // SignupPost is the sign up form action handler.
 func (g *glob) SignupPost(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	user := &users.User{
-		Email:    r.FormValue("email"),
-		Name:     r.FormValue("name"),
-		Password: r.FormValue("password"),
-		Db:       g.udb.Db,
+		Email: r.FormValue("email"),
+		Name:  r.FormValue("name"),
+		Db:    g.udb.Db,
 	}
-	err := user.Create()
+	err := user.Create(r.FormValue("password"))
 	if err != nil {
 		fmt.Fprintf(w, err.Error())
 		return
@@ -96,11 +95,10 @@ func (g *glob) SignupPost(w http.ResponseWriter, r *http.Request, ps httprouter.
 // LoginPost is the login form action handler.
 func (g *glob) LoginPost(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	user := &users.User{
-		Email:    r.FormValue("email"),
-		Password: r.FormValue("password"),
-		Db:       g.udb.Db,
+		Email: r.FormValue("email"),
+		Db:    g.udb.Db,
 	}
-	if !user.Authenticate() {
+	if !user.Authenticate(r.FormValue("password")) {
 		fmt.Fprint(w, "Authentication Failed.  Bad username/password combination or user not found\n")
 		return
 	}

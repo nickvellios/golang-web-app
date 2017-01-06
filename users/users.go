@@ -13,21 +13,21 @@ import (
 )
 
 type User struct {
-	Email     string  `json:"email"`
-	Name      string  `json:"name"`
-	Password  string  `json:"-"`
+	Email string `json:"email"`
+	Name  string `json:"name"`
+	//Password  string  `json:"-"`
 	Hash      string  `json:"-"`
 	CSRFToken string  `json:"-"`
 	Id        int     `json:"id"`
 	Db        *sql.DB `json:"-"`
 }
 
-func (u *User) Authenticate() bool {
+func (u *User) Authenticate(pass string) bool {
 	if !u.Load() {
 		return false
 	}
 
-	err := ncrypt.CheckPassHash([]byte(u.Hash), []byte(u.Password))
+	err := ncrypt.CheckPassHash([]byte(u.Hash), []byte(pass))
 	if err != nil {
 		fmt.Println(err.Error())
 		return false
@@ -70,7 +70,7 @@ func (u *User) Save() {
 */
 
 // Create saves a user object to the database.  If a duplicate email is found this will fail.
-func (u *User) Create() error {
+func (u *User) Create(pass string) error {
 	if !u.validEmail() {
 		return errors.New("Invalid email format")
 	}
@@ -78,7 +78,7 @@ func (u *User) Create() error {
 		return errors.New("User already exists")
 	}
 	u.sanitize()
-	u.HashPass()
+	u.HashPass(pass)
 	var lastInsertId int
 	err := u.Db.QueryRow("INSERT INTO users(email, name, password) VALUES($1,$2,$3) returning id;", u.Email, u.Name, u.Hash).Scan(&lastInsertId)
 	if err != nil {
@@ -139,8 +139,8 @@ func (u *User) RevokeCSRF() {
 	}
 }
 
-func (u *User) HashPass() {
-	hash, _ := ncrypt.HashPass([]byte(u.Password))
+func (u *User) HashPass(pass string) {
+	hash, _ := ncrypt.HashPass([]byte(pass))
 	u.Hash = string(hash)
 }
 
